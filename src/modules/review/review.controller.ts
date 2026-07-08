@@ -19,6 +19,22 @@ const createReview = catchAsync(
   }
 );
 
+const getReviewsByGear = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const reviews = await reviewService.getReviewsByGearFromDB(
+      req.params.id as string
+    );
+
+    sendResponse(res, {
+      success: true,
+      statusCode: httpStatus.OK,
+      message: 'Reviews retrieved successfully',
+      data: reviews,
+    });
+  }
+);
+
 export const reviewController = {
   createReview,
+  getReviewsByGear,
 };
