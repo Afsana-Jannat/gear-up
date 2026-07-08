@@ -7,6 +7,46 @@ datasource db {
   provider = "postgresql"
 }
 
+// enum's part
+enum Role {
+  CUSTOMER
+  PROVIDER
+  ADMIN
+}
+
+enum UserStatus {
+  ACTIVE
+  SUSPENDED
+}
+
+enum GearAvailability {
+  AVAILABLE
+  OUT_OF_STOCK
+}
+
+enum RentalStatus {
+  PLACED
+  CONFIRMED
+  PAID
+  PICKED_UP
+  RETURNED
+  CANCELLED
+}
+
+enum PaymentStatus {
+  PENDING
+  COMPLETED
+  FAILED
+  REFUNDED
+}
+
+enum PaymentMethod {
+  STRIPE
+  SSLCOMMERZ
+}
+
+// all models
+
 model User {
   id        String        @id @default(uuid())
   name      String
@@ -104,41 +144,4 @@ model Review {
   rentalOrder   RentalOrder @relation(fields: [rentalOrderId], references: [id])
 
   @@map("reviews")
-}
-
-enum Role {
-  CUSTOMER
-  PROVIDER
-  ADMIN
-}
-
-enum UserStatus {
-  ACTIVE
-  SUSPENDED
-}
-
-enum GearAvailability {
-  AVAILABLE
-  OUT_OF_STOCK
-}
-
-enum RentalStatus {
-  PLACED
-  CONFIRMED
-  PAID
-  PICKED_UP
-  RETURNED
-  CANCELLED
-}
-
-enum PaymentStatus {
-  PENDING
-  COMPLETED
-  FAILED
-  REFUNDED
-}
-
-enum PaymentMethod {
-  STRIPE
-  SSLCOMMERZ
 }
