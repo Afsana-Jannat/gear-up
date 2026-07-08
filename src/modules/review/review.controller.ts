@@ -28,7 +28,7 @@ const getReviewsByGear = catchAsync(
     sendResponse(res, {
       success: true,
       statusCode: httpStatus.OK,
-      message: 'Reviews retrieved successfully',
+      message: 'Reviews get successfully',
       data: reviews,
     });
   }
