@@ -2,7 +2,6 @@ import { prisma } from '../../lib/prisma';
 import { ICreateGear, IGearQuery, IUpdateGear } from './gear.interface';
 
 const createGearIntoDB = async (providerId: string, payload: ICreateGear) => {
-  // Check Category
   await prisma.category.findUniqueOrThrow({
     where: {
       id: payload.categoryId,
