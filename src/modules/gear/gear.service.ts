@@ -74,12 +74,10 @@ const updateGearIntoDB = async (
     },
   });
 
-  // Only owner can update
   if (gear.providerId !== providerId) {
     throw new Error('You are not authorized to update this gear.');
   }
 
-  // Category check (if category changed)
   if (payload?.categoryId) {
     await prisma.category.findUniqueOrThrow({
       where: {
