@@ -26,7 +26,7 @@ const getAllGear = catchAsync(
     sendResponse(res, {
       success: true,
       statusCode: httpStatus.OK,
-      message: 'All gears retrieved successfully',
+      message: 'All gears successfully',
       data: gears,
     });
   }
