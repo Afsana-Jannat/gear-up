@@ -26,7 +26,7 @@ const getMyRentals = catchAsync(
     sendResponse(res, {
       success: true,
       statusCode: httpStatus.OK,
-      message: 'My rentals retrieved successfully',
+      message: 'My rentals   successfully',
       data: rentals,
     });
   }
@@ -39,7 +39,7 @@ const getAllRentals = catchAsync(
     sendResponse(res, {
       success: true,
       statusCode: httpStatus.OK,
-      message: 'All rentals retrieved successfully',
+      message: 'All rentals   successfully',
       data: rentals,
     });
   }

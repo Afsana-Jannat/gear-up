@@ -39,7 +39,7 @@ const getSingleGear = catchAsync(
     sendResponse(res, {
       success: true,
       statusCode: httpStatus.OK,
-      message: 'Gear retrieved successfully',
+      message: 'Gear   successfully',
       data: gear,
     });
   }

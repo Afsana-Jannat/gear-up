@@ -46,7 +46,7 @@ const getMyPayments = catchAsync(
     sendResponse(res, {
       success: true,
       statusCode: httpStatus.OK,
-      message: 'Payments retrieved successfully',
+      message: 'Payments   successfully',
       data: result,
     });
   }
@@ -64,7 +64,7 @@ const getSinglePayment = catchAsync(
     sendResponse(res, {
       success: true,
       statusCode: httpStatus.OK,
-      message: 'Payment retrieved successfully',
+      message: 'Payment   successfully',
       data: result,
     });
   }
