@@ -1,4 +1,5 @@
 import { ErrorRequestHandler } from 'express';
+import { Prisma } from '../../generated/prisma';
 
 export const globalErrorHandler: ErrorRequestHandler = (
   err,
@@ -8,17 +9,35 @@ export const globalErrorHandler: ErrorRequestHandler = (
 ) => {
   let statusCode = 500;
   let message = 'Something went wrong';
-  let errorDetails: unknown = err;
+  let errorDetails: unknown = [];
 
-  // Prisma Record Not Found
-  if (err.name === 'PrismaClientKnownRequestError') {
-    statusCode = 404;
-    message = err.message;
+  // Prisma Validation Error
+  if (err instanceof Prisma.PrismaClientValidationError) {
+    statusCode = 400;
+    message = 'Validation Error';
+    errorDetails = err.message;
+  }
+
+  // Prisma Known Error
+  else if (err instanceof Prisma.PrismaClientKnownRequestError) {
+    statusCode = 400;
+
+    if (err.code === 'P2002') {
+      message = 'Duplicate value found.';
+    } else if (err.code === 'P2025') {
+      statusCode = 404;
+      message = 'Resource not found.';
+    } else {
+      message = err.message;
+    }
+
+    errorDetails = err.meta ?? [];
   }
 
   // Normal Error
-  if (err instanceof Error) {
+  else if (err instanceof Error) {
     message = err.message;
+    errorDetails = [];
   }
 
   res.status(statusCode).json({
