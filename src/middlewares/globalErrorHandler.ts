@@ -1,24 +1,23 @@
-import { NextFunction, Request, Response } from 'express';
-import { Prisma } from '../../generated/prisma';
+import { ErrorRequestHandler } from 'express';
 
-export const globalErrorHandler = (
-  err: any,
-  req: Request,
-  res: Response,
-  next: NextFunction
+export const globalErrorHandler: ErrorRequestHandler = (
+  err,
+  req,
+  res,
+  next
 ) => {
   let statusCode = 500;
-  let message = err.message || 'Something went wrong';
+  let message = 'Something went wrong';
+  let errorDetails: unknown = err;
 
-  // client Validation Error
-  if (err instanceof Prisma.PrismaClientValidationError) {
-    statusCode = 400;
-    message = 'Validation Error';
+  // Prisma Record Not Found
+  if (err.name === 'PrismaClientKnownRequestError') {
+    statusCode = 404;
+    message = err.message;
   }
 
-  // Client Known Error
-  if (err instanceof Prisma.PrismaClientKnownRequestError) {
-    statusCode = 400;
+  // Normal Error
+  if (err instanceof Error) {
     message = err.message;
   }
 
@@ -26,5 +25,6 @@ export const globalErrorHandler = (
     success: false,
     statusCode,
     message,
+    errorDetails,
   });
 };
