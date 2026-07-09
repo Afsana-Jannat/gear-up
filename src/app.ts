@@ -13,6 +13,7 @@ import { reviewRoutes } from './modules/review/review.route';
 import { paymentRoutes } from './modules/payment/payment.route';
 import { adminRoutes } from './modules/admin/admin.route';
 import { providerRoutes } from './modules/provider/provider.route';
+import { globalErrorHandler } from './middlewares/globalErrorHandler';
 
 const app: Application = express();
 
@@ -40,5 +41,6 @@ app.use('/api/reviews', reviewRoutes);
 app.use('/api/payments', paymentRoutes);
 app.use('/api/admin', adminRoutes);
 app.use('/api/provider', providerRoutes);
+app.use(globalErrorHandler);
 
 export default app;
