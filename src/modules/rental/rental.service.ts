@@ -19,6 +19,10 @@ const createRentalIntoDB = async (
   const startDate = new Date(payload.startDate);
   const endDate = new Date(payload.endDate);
 
+  if (startDate < new Date()) {
+    throw new Error('Start date cannot be in the past.');
+  }
+
   if (endDate <= startDate) {
     throw new Error('End date must be after start date.');
   }

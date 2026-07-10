@@ -50,6 +50,7 @@ const updateGear = catchAsync(
     const gear = await gearService.updateGearIntoDB(
       req.params.id as string,
       req.user!.id,
+      req.user!.role,
       req.body
     );
 
@@ -64,8 +65,11 @@ const updateGear = catchAsync(
 
 const deleteGear = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
-    await gearService.deleteGearFromDB(req.params.id as string, req.user!.id);
-
+    await gearService.deleteGearFromDB(
+      req.params.id as string,
+      req.user!.id,
+      req.user!.role
+    );
     sendResponse(res, {
       success: true,
       statusCode: httpStatus.OK,

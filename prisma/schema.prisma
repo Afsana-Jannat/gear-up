@@ -42,7 +42,6 @@ enum PaymentStatus {
 
 enum PaymentMethod {
   STRIPE
-  SSLCOMMERZ
 }
 
 // all models

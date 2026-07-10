@@ -1,3 +1,4 @@
+import { Role } from '../../../generated/prisma';
 import { prisma } from '../../lib/prisma';
 import { ICreateGear, IGearQuery, IUpdateGear } from './gear.interface';
 
@@ -12,6 +13,7 @@ const createGearIntoDB = async (providerId: string, payload: ICreateGear) => {
     data: {
       ...payload,
       providerId,
+      availability: payload.stock > 0 ? 'AVAILABLE' : 'OUT_OF_STOCK',
     },
     include: {
       category: true,
@@ -88,7 +90,6 @@ const getAllGearFromDB = async (query: IGearQuery) => {
 
   const gears = await prisma.gear.findMany({
     where,
-
     include: {
       category: true,
       provider: {
@@ -97,13 +98,10 @@ const getAllGearFromDB = async (query: IGearQuery) => {
         },
       },
     },
-
     orderBy: {
       [sortBy]: sortOrder,
     },
-
     skip: (Number(page) - 1) * Number(limit),
-
     take: Number(limit),
   });
 
@@ -111,7 +109,7 @@ const getAllGearFromDB = async (query: IGearQuery) => {
 };
 
 const getSingleGearFromDB = async (id: string) => {
-  const gear = await prisma.gear.findUniqueOrThrow({
+  return prisma.gear.findUniqueOrThrow({
     where: {
       id,
     },
@@ -124,13 +122,12 @@ const getSingleGearFromDB = async (id: string) => {
       },
     },
   });
-
-  return gear;
 };
 
 const updateGearIntoDB = async (
   id: string,
   providerId: string,
+  role: Role,
   payload: IUpdateGear
 ) => {
   const gear = await prisma.gear.findUniqueOrThrow({
@@ -139,11 +136,12 @@ const updateGearIntoDB = async (
     },
   });
 
-  if (gear.providerId !== providerId) {
+  // update all
+  if (role !== Role.ADMIN && gear.providerId !== providerId) {
     throw new Error('You are not authorized to update this gear.');
   }
 
-  if (payload?.categoryId) {
+  if (payload.categoryId) {
     await prisma.category.findUniqueOrThrow({
       where: {
         id: payload.categoryId,
@@ -151,11 +149,19 @@ const updateGearIntoDB = async (
     });
   }
 
+  const updateData: IUpdateGear = {
+    ...payload,
+  };
+
+  if (payload.stock !== undefined) {
+    updateData.availability = payload.stock > 0 ? 'AVAILABLE' : 'OUT_OF_STOCK';
+  }
+
   const updatedGear = await prisma.gear.update({
     where: {
       id,
     },
-    data: payload,
+    data: updateData,
     include: {
       category: true,
       provider: {
@@ -169,14 +175,15 @@ const updateGearIntoDB = async (
   return updatedGear;
 };
 
-const deleteGearFromDB = async (id: string, providerId: string) => {
+const deleteGearFromDB = async (id: string, providerId: string, role: Role) => {
   const gear = await prisma.gear.findUniqueOrThrow({
     where: {
       id,
     },
   });
 
-  if (gear.providerId !== providerId) {
+  //delete all
+  if (role !== Role.ADMIN && gear.providerId !== providerId) {
     throw new Error('You are not authorized to delete this gear.');
   }
 

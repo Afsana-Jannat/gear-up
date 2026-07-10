@@ -22,20 +22,20 @@ const createPayment = catchAsync(
   }
 );
 
-const confirmPayment = catchAsync(
-  async (req: Request, res: Response, next: NextFunction) => {
-    const result = await paymentService.confirmPaymentIntoDB(
-      req.params.id as string
-    );
+// const confirmPayment = catchAsync(
+//   async (req: Request, res: Response, next: NextFunction) => {
+//     const result = await paymentService.confirmPaymentIntoDB(
+//       req.params.id as string
+//     );
 
-    sendResponse(res, {
-      success: true,
-      statusCode: httpStatus.OK,
-      message: 'Payment confirmed successfully',
-      data: result,
-    });
-  }
-);
+//     sendResponse(res, {
+//       success: true,
+//       statusCode: httpStatus.OK,
+//       message: 'Payment confirmed successfully',
+//       data: result,
+//     });
+//   }
+// );
 
 const getMyPayments = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
@@ -70,9 +70,35 @@ const getSinglePayment = catchAsync(
   }
 );
 
+const paymentSuccess = catchAsync(async (req, res) => {
+  const sessionId = req.query.session_id as string;
+
+  const result = await paymentService.paymentSuccessIntoDB(sessionId);
+
+  sendResponse(res, {
+    success: true,
+    statusCode: httpStatus.OK,
+    message: 'Payment completed successfully',
+    data: result,
+  });
+});
+
+const paymentCancel = catchAsync(async (req, res) => {
+  const result = await paymentService.paymentCancel();
+
+  sendResponse(res, {
+    success: true,
+    statusCode: httpStatus.OK,
+    message: result.message,
+    data: null,
+  });
+});
+
 export const paymentController = {
   createPayment,
-  confirmPayment,
+  // confirmPayment,
   getMyPayments,
   getSinglePayment,
+  paymentSuccess,
+  paymentCancel,
 };

@@ -14,7 +14,7 @@ CREATE TYPE "RentalStatus" AS ENUM ('PLACED', 'CONFIRMED', 'PAID', 'PICKED_UP', 
 CREATE TYPE "PaymentStatus" AS ENUM ('PENDING', 'COMPLETED', 'FAILED', 'REFUNDED');
 
 -- CreateEnum
-CREATE TYPE "PaymentMethod" AS ENUM ('STRIPE', 'SSLCOMMERZ');
+CREATE TYPE "PaymentMethod" AS ENUM ('STRIPE');
 
 -- CreateTable
 CREATE TABLE "users" (
