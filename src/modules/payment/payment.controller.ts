@@ -3,6 +3,8 @@ import httpStatus from 'http-status';
 import { catchAsync } from '../../utils/catchAsync.js';
 import { sendResponse } from '../../utils/sendResponse.js';
 import { paymentService } from './payment.service.js';
+import { stripe } from '../../lib/stripe.js';
+import config from '../../config/index.js';
 
 const createPayment = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
@@ -83,6 +85,37 @@ const paymentSuccess = catchAsync(async (req, res) => {
   });
 });
 
+const stripeWebhook = catchAsync(async (req, res) => {
+  const signature = req.headers['stripe-signature'] as string;
+
+  let event;
+
+  try {
+    event = stripe.webhooks.constructEvent(
+      req.body,
+      signature,
+      config.stripe_webhook_secret!
+    );
+  } catch (error) {
+    res.status(400).json({
+      success: false,
+      message: 'Webhook signature verification failed',
+    });
+
+    return;
+  }
+
+  if (event.type === 'checkout.session.completed') {
+    const session = event.data.object as any;
+
+    await paymentService.handleStripeWebhook(session.id);
+  }
+
+  res.status(200).json({
+    success: true,
+    message: 'Webhook received',
+  });
+});
 const paymentCancel = catchAsync(async (req, res) => {
   const result = await paymentService.paymentCancel();
 
@@ -101,4 +134,5 @@ export const paymentController = {
   getSinglePayment,
   paymentSuccess,
   paymentCancel,
+  stripeWebhook,
 };

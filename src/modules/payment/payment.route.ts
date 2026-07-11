@@ -14,6 +14,8 @@ router.post(
   paymentController.createPayment
 );
 
+router.post('/webhook', paymentController.stripeWebhook);
+
 router.get('/success', paymentController.paymentSuccess);
 
 router.get('/cancel', paymentController.paymentCancel);

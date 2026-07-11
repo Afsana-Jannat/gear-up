@@ -64,7 +64,7 @@ const createPaymentIntoDB = async (
       },
     ],
 
-    success_url: `${config.app_url}api/payments/success?session_id={CHECKOUT_SESSION_ID}`,
+    success_url: `${config.app_url}/api/payments/success?session_id={CHECKOUT_SESSION_ID}`,
 
     cancel_url: `${config.app_url}api/payments/cancel`,
 
@@ -195,6 +195,40 @@ const paymentSuccessIntoDB = async (sessionId: string) => {
   return updatedPayment;
 };
 
+const handleStripeWebhook = async (sessionId: string) => {
+  const payment = await prisma.payment.findUniqueOrThrow({
+    where: {
+      transactionId: sessionId,
+    },
+  });
+
+  // duplicate webhook protection
+  if (payment.status === PaymentStatus.COMPLETED) {
+    return payment;
+  }
+
+  const updatedPayment = await prisma.payment.update({
+    where: {
+      id: payment.id,
+    },
+    data: {
+      status: PaymentStatus.COMPLETED,
+      paidAt: new Date(),
+    },
+  });
+
+  await prisma.rentalOrder.update({
+    where: {
+      id: payment.rentalOrderId,
+    },
+    data: {
+      status: 'PAID',
+    },
+  });
+
+  return updatedPayment;
+};
+
 const paymentCancel = async () => {
   return {
     message: 'Payment cancelled.',
@@ -207,5 +241,6 @@ export const paymentService = {
   getMyPaymentsFromDB,
   getSinglePaymentFromDB,
   paymentSuccessIntoDB,
+  handleStripeWebhook,
   paymentCancel,
 };
