@@ -1,12 +1,12 @@
 import { Router } from 'express';
-import { rentalController } from './rental.controller';
-import { auth } from '../../middlewares/auth';
+import { rentalController } from './rental.controller.js';
+import { auth } from '../../middlewares/auth.js';
 import { Role } from '../../../generated/prisma';
 import {
   createRentalSchema,
   updateRentalStatusSchema,
-} from '../../validations/rental.validation';
-import { validateRequest } from '../../middlewares/validateRequests';
+} from '../../validations/rental.validation.js';
+import { validateRequest } from '../../middlewares/validateRequests.js';
 
 const router = Router();
 

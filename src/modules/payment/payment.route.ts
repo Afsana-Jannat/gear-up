@@ -1,9 +1,9 @@
 import { Router } from 'express';
 import { Role } from '../../../generated/prisma';
-import { auth } from '../../middlewares/auth';
-import { paymentController } from './payment.controller';
-import { validateRequest } from '../../middlewares/validateRequests';
-import { createPaymentSchema } from '../../validations/payment.validation';
+import { auth } from '../../middlewares/auth.js';
+import { paymentController } from './payment.controller.js';
+import { validateRequest } from '../../middlewares/validateRequests.js';
+import { createPaymentSchema } from '../../validations/payment.validation.js';
 
 const router = Router();
 

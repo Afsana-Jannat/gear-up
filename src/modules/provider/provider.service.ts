@@ -1,5 +1,5 @@
 import { RentalStatus } from '../../../generated/prisma';
-import { prisma } from '../../lib/prisma';
+import { prisma } from '../../lib/prisma.js';
 
 const getProviderOrdersFromDB = async (providerId: string) => {
   return prisma.rentalOrder.findMany({

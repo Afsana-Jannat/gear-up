@@ -1,12 +1,12 @@
 import { Router } from 'express';
-import { categoryController } from './category.controller';
-import { auth } from '../../middlewares/auth';
+import { categoryController } from './category.controller.js';
+import { auth } from '../../middlewares/auth.js';
 import { Role } from '../../../generated/prisma';
-import { validateRequest } from '../../middlewares/validateRequests';
+import { validateRequest } from '../../middlewares/validateRequests.js';
 import {
   createCategorySchema,
   updateCategorySchema,
-} from '../../validations/category.validation';
+} from '../../validations/category.validation.js';
 
 const router = Router();
 

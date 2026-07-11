@@ -1,9 +1,9 @@
 import { Router } from 'express';
 import { Role } from '../../../generated/prisma';
-import { auth } from '../../middlewares/auth';
-import { adminController } from './admin.controller';
-import { validateRequest } from '../../middlewares/validateRequests';
-import { updateUserStatusSchema } from '../../validations/admin.validation';
+import { auth } from '../../middlewares/auth.js';
+import { adminController } from './admin.controller.js';
+import { validateRequest } from '../../middlewares/validateRequests.js';
+import { updateUserStatusSchema } from '../../validations/admin.validation.js';
 
 const router = Router();
 

@@ -1,6 +1,6 @@
 import { Role } from '../../../generated/prisma';
-import { prisma } from '../../lib/prisma';
-import { ICreateGear, IGearQuery, IUpdateGear } from './gear.interface';
+import { prisma } from '../../lib/prisma.js';
+import { ICreateGear, IGearQuery, IUpdateGear } from './gear.interface.js';
 
 const createGearIntoDB = async (providerId: string, payload: ICreateGear) => {
   await prisma.category.findUniqueOrThrow({

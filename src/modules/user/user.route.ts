@@ -1,12 +1,12 @@
 import { Router } from 'express';
-import { userController } from './user.controller';
-import { auth } from '../../middlewares/auth';
+import { userController } from './user.controller.js';
+import { auth } from '../../middlewares/auth.js';
 import { Role } from '../../../generated/prisma';
 import {
   registerSchema,
   updateProfileSchema,
-} from '../../validations/auth.validation';
-import { validateRequest } from '../../middlewares/validateRequests';
+} from '../../validations/auth.validation.js';
+import { validateRequest } from '../../middlewares/validateRequests.js';
 
 const router = Router();
 

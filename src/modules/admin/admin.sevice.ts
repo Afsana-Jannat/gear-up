@@ -1,5 +1,5 @@
 import { UserStatus } from '../../../generated/prisma';
-import { prisma } from '../../lib/prisma';
+import { prisma } from '../../lib/prisma.js';
 
 const getAllUsersFromDB = async () => {
   return prisma.user.findMany({

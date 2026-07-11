@@ -1,5 +1,5 @@
-import { prisma } from '../../lib/prisma';
-import { ICreateCategory, IUpdateCategory } from './category.interface';
+import { prisma } from '../../lib/prisma.js';
+import { ICreateCategory, IUpdateCategory } from './category.interface.js';
 
 const createCategoryIntoDB = async (payload: ICreateCategory) => {
   const isExist = await prisma.category.findUnique({

@@ -1,6 +1,6 @@
-import { prisma } from '../../lib/prisma';
+import { prisma } from '../../lib/prisma.js';
 import { RentalStatus } from '../../../generated/prisma';
-import { ICreateRental, IUpdateRentalStatus } from './rental.interface';
+import { ICreateRental, IUpdateRentalStatus } from './rental.interface.js';
 
 const createRentalIntoDB = async (
   customerId: string,

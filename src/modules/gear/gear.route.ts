@@ -1,12 +1,12 @@
 import { Router } from 'express';
-import { gearController } from './gear.controller';
-import { auth } from '../../middlewares/auth';
+import { gearController } from './gear.controller.js';
+import { auth } from '../../middlewares/auth.js';
 import { Role } from '../../../generated/prisma';
-import { validateRequest } from '../../middlewares/validateRequests';
+import { validateRequest } from '../../middlewares/validateRequests.js';
 import {
   createGearSchema,
   updateGearSchema,
-} from '../../validations/gear.validation';
+} from '../../validations/gear.validation.js';
 
 const router = Router();
 

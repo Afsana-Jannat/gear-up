@@ -1,5 +1,5 @@
-import { prisma } from '../../lib/prisma';
-import { ICreateReview } from './review.interface';
+import { prisma } from '../../lib/prisma.js';
+import { ICreateReview } from './review.interface.js';
 
 const createReviewIntoDB = async (
   customerId: string,

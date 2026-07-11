@@ -1,7 +1,7 @@
-import { stripe } from '../../lib/stripe';
+import { stripe } from '../../lib/stripe.js';
 import config from '../../config';
-import { prisma } from '../../lib/prisma';
-import { ICreatePayment } from './payment.interface';
+import { prisma } from '../../lib/prisma.js';
+import { ICreatePayment } from './payment.interface.js';
 import { PaymentStatus } from '../../../generated/prisma';
 
 const createPaymentIntoDB = async (

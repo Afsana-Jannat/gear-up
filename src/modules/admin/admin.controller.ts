@@ -1,9 +1,9 @@
 import { NextFunction, Request, Response } from 'express';
 import httpStatus from 'http-status';
 import { UserStatus } from '../../../generated/prisma';
-import { catchAsync } from '../../utils/catchAsync';
-import { sendResponse } from '../../utils/sendResponse';
-import { adminService } from './admin.sevice';
+import { catchAsync } from '../../utils/catchAsync.js';
+import { sendResponse } from '../../utils/sendResponse.js';
+import { adminService } from './admin.sevice.js';
 
 const getAllUsers = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
