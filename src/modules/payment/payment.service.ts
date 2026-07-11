@@ -1,5 +1,5 @@
 import { stripe } from '../../lib/stripe.js';
-import config from '../../config';
+import config from '../../config/index.js';
 import { prisma } from '../../lib/prisma.js';
 import { ICreatePayment } from './payment.interface.js';
 import { PaymentStatus } from '@prisma/client';
