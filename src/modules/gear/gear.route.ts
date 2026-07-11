@@ -1,7 +1,7 @@
 import { Router } from 'express';
 import { gearController } from './gear.controller.js';
 import { auth } from '../../middlewares/auth.js';
-import { Role } from '../../../generated/prisma';
+import { Role } from '@prisma/client';
 import { validateRequest } from '../../middlewares/validateRequests.js';
 import {
   createGearSchema,

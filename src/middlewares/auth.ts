@@ -4,7 +4,7 @@ import { prisma } from '../lib/prisma.js';
 import config from '../config';
 import { catchAsync } from '../utils/catchAsync.js';
 import { jwtUtils } from '../utils/jwt.js';
-import { Role } from '../../generated/prisma';
+import { Role } from '@prisma/client';
 
 declare global {
   namespace Express {

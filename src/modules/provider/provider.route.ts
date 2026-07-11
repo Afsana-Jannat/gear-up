@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { Role } from '../../../generated/prisma';
+import { Role } from '@prisma/client';
 import { auth } from '../../middlewares/auth.js';
 import { providerController } from './provider.controller.js';
 

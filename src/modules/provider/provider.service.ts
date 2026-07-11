@@ -1,4 +1,4 @@
-import { RentalStatus } from '../../../generated/prisma';
+import { RentalStatus } from '@prisma/client';
 import { prisma } from '../../lib/prisma.js';
 
 const getProviderOrdersFromDB = async (providerId: string) => {

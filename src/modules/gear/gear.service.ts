@@ -1,4 +1,4 @@
-import { Role } from '../../../generated/prisma';
+import { Role } from '@prisma/client';
 import { prisma } from '../../lib/prisma.js';
 import { ICreateGear, IGearQuery, IUpdateGear } from './gear.interface.js';
 

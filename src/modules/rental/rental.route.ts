@@ -1,7 +1,7 @@
 import { Router } from 'express';
 import { rentalController } from './rental.controller.js';
 import { auth } from '../../middlewares/auth.js';
-import { Role } from '../../../generated/prisma';
+import { Role } from '@prisma/client';
 import {
   createRentalSchema,
   updateRentalStatusSchema,
