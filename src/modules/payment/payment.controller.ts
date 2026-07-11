@@ -129,7 +129,6 @@ const paymentCancel = catchAsync(async (req, res) => {
 
 export const paymentController = {
   createPayment,
-  // confirmPayment,
   getMyPayments,
   getSinglePayment,
   paymentSuccess,
