@@ -12,6 +12,13 @@ export const createCategorySchema = z.object({
     .trim()
     .min(5, 'Description must be at least 5 characters')
     .max(255, 'Description cannot exceed 255 characters'),
+
+  image: z
+    .string()
+    .trim()
+    .url('Please provide a valid image URL.')
+    .optional()
+    .or(z.literal('')),
 });
 
 export const updateCategorySchema = createCategorySchema.partial();
