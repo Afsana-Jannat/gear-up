@@ -64,9 +64,8 @@ const createPaymentIntoDB = async (
       },
     ],
 
-    success_url: `${config.app_url}/api/payments/success?session_id={CHECKOUT_SESSION_ID}`,
-
-    cancel_url: `${config.app_url}api/payments/cancel`,
+    success_url: `${config.frontend_url}/payment/success?session_id={CHECKOUT_SESSION_ID}`,
+    cancel_url: `${config.frontend_url}/payment/cancel`,
 
     metadata: {
       rentalOrderId: rental.id,
