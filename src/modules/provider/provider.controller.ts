@@ -39,7 +39,21 @@ const updateProviderOrderStatus = catchAsync(
   }
 );
 
+const getMyGears = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const result = await providerService.getMyGearsFromDB(req.user!.id);
+
+    sendResponse(res, {
+      success: true,
+      statusCode: httpStatus.OK,
+      message: 'Provider gears retrieved successfully',
+      data: result,
+    });
+  }
+);
+
 export const providerController = {
   getProviderOrders,
   updateProviderOrderStatus,
+  getMyGears,
 };

@@ -62,7 +62,22 @@ const updateProviderOrderStatusIntoDB = async (
   return updatedRental;
 };
 
+const getMyGearsFromDB = async (providerId: string) => {
+  return await prisma.gear.findMany({
+    where: {
+      providerId,
+    },
+    include: {
+      category: true,
+    },
+    orderBy: {
+      createdAt: 'desc',
+    },
+  });
+};
+
 export const providerService = {
   getProviderOrdersFromDB,
   updateProviderOrderStatusIntoDB,
+  getMyGearsFromDB,
 };
