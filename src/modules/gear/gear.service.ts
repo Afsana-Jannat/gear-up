@@ -28,6 +28,85 @@ const createGearIntoDB = async (providerId: string, payload: ICreateGear) => {
   return gear;
 };
 
+// const getAllGearFromDB = async (query: IGearQuery) => {
+//   const {
+//     search,
+//     categoryId,
+//     brand,
+//     availability,
+//     minPrice,
+//     maxPrice,
+//     page = '1',
+//     limit = '10',
+//     sortBy = 'createdAt',
+//     sortOrder = 'desc',
+//   } = query;
+
+//   const where: any = {};
+
+//   if (search) {
+//     where.OR = [
+//       {
+//         name: {
+//           contains: search,
+//           mode: 'insensitive',
+//         },
+//       },
+//       {
+//         brand: {
+//           contains: search,
+//           mode: 'insensitive',
+//         },
+//       },
+//     ];
+//   }
+
+//   if (categoryId) {
+//     where.categoryId = categoryId;
+//   }
+
+//   if (brand) {
+//     where.brand = {
+//       contains: brand,
+//       mode: 'insensitive',
+//     };
+//   }
+
+//   if (availability) {
+//     where.availability = availability;
+//   }
+
+//   if (minPrice || maxPrice) {
+//     where.pricePerDay = {};
+
+//     if (minPrice) {
+//       where.pricePerDay.gte = Number(minPrice);
+//     }
+
+//     if (maxPrice) {
+//       where.pricePerDay.lte = Number(maxPrice);
+//     }
+//   }
+
+//   const gears = await prisma.gear.findMany({
+//     where,
+//     include: {
+//       category: true,
+//       provider: {
+//         omit: {
+//           password: true,
+//         },
+//       },
+//     },
+//     orderBy: {
+//       [sortBy]: sortOrder,
+//     },
+//     skip: (Number(page) - 1) * Number(limit),
+//     take: Number(limit),
+//   });
+
+//   return gears;
+// };
 const getAllGearFromDB = async (query: IGearQuery) => {
   const {
     search,
@@ -88,6 +167,13 @@ const getAllGearFromDB = async (query: IGearQuery) => {
     }
   }
 
+  const currentPage = Number(page);
+  const currentLimit = Number(limit);
+
+  const total = await prisma.gear.count({
+    where,
+  });
+
   const gears = await prisma.gear.findMany({
     where,
     include: {
@@ -101,13 +187,20 @@ const getAllGearFromDB = async (query: IGearQuery) => {
     orderBy: {
       [sortBy]: sortOrder,
     },
-    skip: (Number(page) - 1) * Number(limit),
-    take: Number(limit),
+    skip: (currentPage - 1) * currentLimit,
+    take: currentLimit,
   });
 
-  return gears;
+  return {
+    meta: {
+      page: currentPage,
+      limit: currentLimit,
+      total,
+      totalPage: Math.ceil(total / currentLimit),
+    },
+    data: gears,
+  };
 };
-
 const getSingleGearFromDB = async (id: string) => {
   return prisma.gear.findUniqueOrThrow({
     where: {
