@@ -116,7 +116,7 @@ const getAllGearFromDB = async (query: IGearQuery) => {
     minPrice,
     maxPrice,
     page = '1',
-    limit = '10',
+    limit = '6',
     sortBy = 'createdAt',
     sortOrder = 'desc',
   } = query;
