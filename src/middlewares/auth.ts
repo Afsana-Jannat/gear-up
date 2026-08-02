@@ -23,10 +23,18 @@ export const auth = (...requiredRoles: Role[]) => {
   return catchAsync(async (req: Request, res: Response, next: NextFunction) => {
     let token: string | undefined;
 
+    // if (req.cookies?.accessToken) {
+    //   token = req.cookies.accessToken;
+    // } else if (req.headers.authorization?.startsWith('Bearer ')) {
+    //   token = req.headers.authorization.split(' ')[1];
+    // }
+
     if (req.cookies?.accessToken) {
       token = req.cookies.accessToken;
-    } else if (req.headers.authorization?.startsWith('Bearer ')) {
-      token = req.headers.authorization.split(' ')[1];
+    } else if (req.headers.authorization) {
+      token = req.headers.authorization.startsWith('Bearer ')
+        ? req.headers.authorization.split(' ')[1]
+        : req.headers.authorization;
     }
 
     if (!token) {
