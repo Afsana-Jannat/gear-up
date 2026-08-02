@@ -52,8 +52,20 @@ const getMyGears = catchAsync(
   }
 );
 
+const getProviderEarnings = catchAsync(async (req, res) => {
+  const result = await providerService.getProviderEarningsFromDB(req.user!.id);
+
+  sendResponse(res, {
+    success: true,
+    statusCode: httpStatus.OK,
+    message: 'Provider earnings retrieved successfully',
+    data: result,
+  });
+});
+
 export const providerController = {
   getProviderOrders,
   updateProviderOrderStatus,
   getMyGears,
+  getProviderEarnings,
 };

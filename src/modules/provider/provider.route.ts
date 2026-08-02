@@ -19,4 +19,10 @@ router.patch(
 
 router.get('/gears', auth(Role.PROVIDER), providerController.getMyGears);
 
+router.get(
+  '/earnings',
+  auth(Role.PROVIDER),
+  providerController.getProviderEarnings
+);
+
 export const providerRoutes = router;
