@@ -66,6 +66,7 @@ const getMyGearsFromDB = async (providerId: string) => {
   return await prisma.gear.findMany({
     where: {
       providerId,
+      isDeleted: false,
     },
     include: {
       category: true,

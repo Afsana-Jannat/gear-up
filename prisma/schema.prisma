@@ -1,50 +1,10 @@
 generator client {
   provider = "prisma-client-js"
-  // output   = "@prisma/client"
 }
 
 datasource db {
   provider = "postgresql"
 }
-
-// enum's part
-enum Role {
-  CUSTOMER
-  PROVIDER
-  ADMIN
-}
-
-enum UserStatus {
-  ACTIVE
-  SUSPENDED
-}
-
-enum GearAvailability {
-  AVAILABLE
-  OUT_OF_STOCK
-}
-
-enum RentalStatus {
-  PLACED
-  CONFIRMED
-  PAID
-  PICKED_UP
-  RETURNED
-  CANCELLED
-}
-
-enum PaymentStatus {
-  PENDING
-  COMPLETED
-  FAILED
-  REFUNDED
-}
-
-enum PaymentMethod {
-  STRIPE
-}
-
-// all models
 
 model User {
   id        String        @id @default(uuid())
@@ -65,25 +25,14 @@ model User {
   @@map("users")
 }
 
-// model Category {
-//   id          String   @id @default(uuid())
-//   name        String   @unique
-//   description String?
-//   createdAt   DateTime @default(now())
-//   updatedAt   DateTime @updatedAt
-//   gearItems   Gear[]
-//   @@map("categories")
-// }
-
 model Category {
   id          String   @id @default(uuid())
   name        String   @unique
   description String?
-  image       String?
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
-
-  gearItems Gear[]
+  image       String?
+  gearItems   Gear[]
 
   @@map("categories")
 }
@@ -101,8 +50,11 @@ model Gear {
   categoryId   String
   createdAt    DateTime         @default(now())
   updatedAt    DateTime         @updatedAt
-  category     Category         @relation(fields: [categoryId], references: [id])
-  provider     User             @relation("ProviderGear", fields: [providerId], references: [id])
+
+  isDeleted Boolean @default(false)
+
+  category     Category      @relation(fields: [categoryId], references: [id])
+  provider     User          @relation("ProviderGear", fields: [providerId], references: [id])
   rentalOrders RentalOrder[]
   reviews      Review[]
 
@@ -155,4 +107,40 @@ model Review {
   rentalOrder   RentalOrder @relation(fields: [rentalOrderId], references: [id])
 
   @@map("reviews")
+}
+
+enum Role {
+  CUSTOMER
+  PROVIDER
+  ADMIN
+}
+
+enum UserStatus {
+  ACTIVE
+  SUSPENDED
+}
+
+enum GearAvailability {
+  AVAILABLE
+  OUT_OF_STOCK
+}
+
+enum RentalStatus {
+  PLACED
+  CONFIRMED
+  PAID
+  PICKED_UP
+  RETURNED
+  CANCELLED
+}
+
+enum PaymentStatus {
+  PENDING
+  COMPLETED
+  FAILED
+  REFUNDED
+}
+
+enum PaymentMethod {
+  STRIPE
 }

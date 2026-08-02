@@ -121,7 +121,9 @@ const getAllGearFromDB = async (query: IGearQuery) => {
     sortOrder = 'desc',
   } = query;
 
-  const where: any = {};
+  const where: any = {
+    isDeleted: false,
+  };
 
   if (search) {
     where.OR = [
@@ -202,9 +204,10 @@ const getAllGearFromDB = async (query: IGearQuery) => {
   };
 };
 const getSingleGearFromDB = async (id: string) => {
-  return prisma.gear.findUniqueOrThrow({
+  return prisma.gear.findFirstOrThrow({
     where: {
       id,
+      isDeleted: false,
     },
     include: {
       category: true,
@@ -226,6 +229,7 @@ const updateGearIntoDB = async (
   const gear = await prisma.gear.findUniqueOrThrow({
     where: {
       id,
+      isDeleted: false,
     },
   });
 
@@ -268,27 +272,47 @@ const updateGearIntoDB = async (
   return updatedGear;
 };
 
+// const deleteGearFromDB = async (id: string, providerId: string, role: Role) => {
+//   const gear = await prisma.gear.findUniqueOrThrow({
+//     where: {
+//       id,
+//     },
+//   });
+
+//   //delete all
+//   if (role !== Role.ADMIN && gear.providerId !== providerId) {
+//     throw new Error('You are not authorized to delete this gear.');
+//   }
+
+//   await prisma.gear.delete({
+//     where: {
+//       id,
+//     },
+//   });
+
+//   return null;
+// };
+
 const deleteGearFromDB = async (id: string, providerId: string, role: Role) => {
   const gear = await prisma.gear.findUniqueOrThrow({
-    where: {
-      id,
-    },
+    where: { id },
   });
 
-  //delete all
   if (role !== Role.ADMIN && gear.providerId !== providerId) {
     throw new Error('You are not authorized to delete this gear.');
   }
 
-  await prisma.gear.delete({
+  await prisma.gear.update({
     where: {
       id,
+    },
+    data: {
+      isDeleted: true,
     },
   });
 
   return null;
 };
-
 export const gearService = {
   createGearIntoDB,
   getAllGearFromDB,
