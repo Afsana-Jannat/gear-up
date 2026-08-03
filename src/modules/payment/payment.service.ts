@@ -133,14 +133,17 @@ const getMyPaymentsFromDB = async (customerId: string) => {
       },
     },
     include: {
-      rentalOrder: true,
+      rentalOrder: {
+        include: {
+          gear: true,
+        },
+      },
     },
     orderBy: {
       createdAt: 'desc',
     },
   });
 };
-
 const getSinglePaymentFromDB = async (id: string, customerId: string) => {
   return prisma.payment.findFirstOrThrow({
     where: {
@@ -156,14 +159,11 @@ const getSinglePaymentFromDB = async (id: string, customerId: string) => {
 };
 
 const paymentSuccessIntoDB = async (sessionId: string) => {
-
   console.log(
-  `${config.frontend_url}/payment/success?session_id={CHECKOUT_SESSION_ID}`
-);
+    `${config.frontend_url}/payment/success?session_id={CHECKOUT_SESSION_ID}`
+  );
 
-console.log(
-  `${config.frontend_url}/payment/cancel`
-);
+  console.log(`${config.frontend_url}/payment/cancel`);
   const session = await stripe.checkout.sessions.retrieve(sessionId);
 
   if (session.payment_status !== 'paid') {
