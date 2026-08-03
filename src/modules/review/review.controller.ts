@@ -19,6 +19,8 @@ const createReview = catchAsync(
   }
 );
 
+// getreviewsbygear
+
 const getReviewsByGear = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
     const reviews = await reviewService.getReviewsByGearFromDB(
