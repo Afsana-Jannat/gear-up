@@ -63,6 +63,11 @@ const getMyRentalsFromDB = async (customerId: string) => {
     },
     include: {
       gear: true,
+      review: {
+        select: {
+          id: true,
+        },
+      },
     },
     orderBy: {
       createdAt: 'desc',

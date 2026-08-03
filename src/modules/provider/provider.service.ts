@@ -23,6 +23,45 @@ const getProviderOrdersFromDB = async (providerId: string) => {
   });
 };
 
+// const updateProviderOrderStatusIntoDB = async (
+//   providerId: string,
+//   rentalId: string,
+//   status: RentalStatus
+// ) => {
+//   const rental = await prisma.rentalOrder.findUniqueOrThrow({
+//     where: {
+//       id: rentalId,
+//     },
+//     include: {
+//       gear: true,
+//     },
+//   });
+
+//   if (rental.gear.providerId !== providerId) {
+//     throw new Error('You are not authorized.');
+//   }
+
+//   const updatedRental = await prisma.rentalOrder.update({
+//     where: {
+//       id: rentalId,
+//     },
+//     data: {
+//       status,
+//     },
+//     include: {
+//       customer: {
+//         omit: {
+//           password: true,
+//         },
+//       },
+//       gear: true,
+//       payment: true,
+//     },
+//   });
+
+//   return updatedRental;
+// };
+
 const updateProviderOrderStatusIntoDB = async (
   providerId: string,
   rentalId: string,
@@ -39,6 +78,28 @@ const updateProviderOrderStatusIntoDB = async (
 
   if (rental.gear.providerId !== providerId) {
     throw new Error('You are not authorized.');
+  }
+
+  // Prevent updating finished rentals
+  if (
+    rental.status === RentalStatus.CANCELLED ||
+    rental.status === RentalStatus.RETURNED
+  ) {
+    throw new Error('This rental can no longer be updated.');
+  }
+
+  // Allowed status transitions
+  const allowedTransitions: Record<RentalStatus, RentalStatus[]> = {
+    PLACED: [RentalStatus.CONFIRMED, RentalStatus.CANCELLED],
+    CONFIRMED: [RentalStatus.CANCELLED],
+    PAID: [RentalStatus.PICKED_UP],
+    PICKED_UP: [RentalStatus.RETURNED],
+    RETURNED: [],
+    CANCELLED: [],
+  };
+
+  if (!allowedTransitions[rental.status].includes(status)) {
+    throw new Error(`Cannot change status from ${rental.status} to ${status}.`);
   }
 
   const updatedRental = await prisma.rentalOrder.update({
@@ -61,7 +122,6 @@ const updateProviderOrderStatusIntoDB = async (
 
   return updatedRental;
 };
-
 const getMyGearsFromDB = async (providerId: string) => {
   return await prisma.gear.findMany({
     where: {
