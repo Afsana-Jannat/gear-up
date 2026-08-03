@@ -79,7 +79,32 @@ const getReviewsByGearFromDB = async (gearId: string) => {
   });
 };
 
+const getPublicReviewsFromDB = async () => {
+  return prisma.review.findMany({
+    take: 6,
+    orderBy: {
+      createdAt: 'desc',
+    },
+    include: {
+      customer: {
+        select: {
+          name: true,
+          avatar: true,
+        },
+      },
+      gear: {
+        select: {
+          id: true,
+          name: true,
+          image: true,
+        },
+      },
+    },
+  });
+};
+
 export const reviewService = {
   createReviewIntoDB,
   getReviewsByGearFromDB,
+  getPublicReviewsFromDB,
 };

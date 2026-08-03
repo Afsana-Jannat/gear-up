@@ -34,7 +34,19 @@ const getReviewsByGear = catchAsync(
   }
 );
 
+const getPublicReviews = catchAsync(async (req, res) => {
+  const result = await reviewService.getPublicReviewsFromDB();
+
+  sendResponse(res, {
+    success: true,
+    statusCode: 200,
+    message: 'Reviews retrieved successfully',
+    data: result,
+  });
+});
+
 export const reviewController = {
   createReview,
   getReviewsByGear,
+  getPublicReviews,
 };

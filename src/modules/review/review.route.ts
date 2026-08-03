@@ -16,4 +16,6 @@ router.post(
 
 router.get('/gear/:id', reviewController.getReviewsByGear);
 
+router.get('/', reviewController.getPublicReviews);
+
 export const reviewRoutes = router;
